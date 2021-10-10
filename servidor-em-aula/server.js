@@ -1,7 +1,6 @@
 const filmesJson = require("./data/ghibli.json")
 
 const express = require("express");
-const { response } = require("express");
 
 const cors = require("cors")
 
@@ -20,7 +19,11 @@ app.get("/", (request, response) => {
 
 
 app.get("/filmes", (request, response) => {
-    response.status(200).send(filmesJson)
+    response.status(200).json([
+        {
+            "mensagem:": "API de filmes Ghibli da turma On14."
+        }
+    ])
 })
 
 app.get("/filmes/:id", (request, response) => {

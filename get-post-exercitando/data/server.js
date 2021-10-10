@@ -2,6 +2,7 @@
 
 const filmesJson = require("./ghibli.json");//dentro do require coloco o caminho pro meu dado.
 const express = require("express");
+const cors = require("cors")
 
 const app = express();
 
@@ -39,13 +40,25 @@ app.get("/filmes/:id"/*Esses dois pontos significa que agr o que for enviado dep
 })
 
 app.post("/filmes/criar", (request, response) => {
-    let tituloRequest = request.body.title;
-    let descricaoRequest = request.body.description;
+    let tituloRequest = request.body.title/*pego o que ta vindo no request de titulo e coloquei em uma variável*/;
+    let descricaoRequest = request.body.description/*pego o que ta vindo no request de descrição e coloquei em uma variável*/;
 
     let novofilme = {
+        id: (filmesJson.length) + 1/*o novo id vai ser o tamanha do Json +1 */,
         title: tituloRequest,
         description: descricaoRequest
-    }; 
+    }; /* Coloco as duas variáveis criadas acima dentro de um novo objeto. */
+    
+    filmesJson.push(novofilme); /* Utilizei o push para cadastra, inserir, o novo objeto criado acima. */
+
+    response.status(201).json(
+        [
+            {
+                "mensagem": "Filme cadastrado com sucesso.", novofilme
+            }
+        ]
+    ); /* A response é necessária para o servidor não ficar aberto esperando uma resposta. */
+
 })
 
 app.listen(8081, () => {
@@ -60,6 +73,13 @@ filmesJson.find(filme => filme.id == idRequest) De onde vem esse "filme" na arro
 BODY PARSE: 
 Parsear > A ação de uma análise de uma cadeia de string, vai separar, dizer o que é o que para poder manipular.
 
+node fs: 
+
+configuração da rota: rotas diferentes, nomes de rotas diferentes.
+
+Callback: Dentro do listen, pe chamado um callback em aberto. Ex.: "app.listen(8081, () => {
+    console.log("alo, pepe moreno? to na porta 8081.");
+})". Esse listen é do express, e serve para observar o comportamento do servidor. 
 
 */
 
