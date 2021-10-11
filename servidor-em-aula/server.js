@@ -1,4 +1,6 @@
-const filmesJson = require("./ghibli.json");//dentro do require coloco o caminho pro meu dado.
+//PAREI EM 1h50min QUARTA PARTE III 06/10
+
+const filmesJson = require("./data/ghibli.json"); //dentro do require coloco o caminho pro meu dado.
 const express = require("express");
 const cors = require("cors")
 
@@ -27,7 +29,17 @@ app.get("/filmes",(request, response) => {
     response.status(200).send(filmesJson); //só coloca.json se precisar transformar em json. Coloca o .send quando é so pra enviar. 
 })
 
-app.get("/filmes/:id"/*Esses dois pontos significa que agr o que for enviado depois do "/filmes", o meu código vai entender que é um id e vai usar esse ":id" para fazer a pesquisa. Ex. de URL: localhost:8081/filmes/4. Esse 4 é a id que eu quero encontrar. */,(request, response) => {
+app.get("/filmes/filtro", (request, response) => {
+    let tituloRequest = request.query.titulo.toLocaleLowerCase();/*esse "titulo" é o nome que vai ser utilizado pra enviar a query. Pode ser qualquer um.*/;
+    let filmeEncontrado = filmesJson.find(
+        filme => filme.title.toLocaleLowerCase() == tituloRequest
+    );
+
+    response.status(200).send(filmeEncontrado);
+
+})
+
+app.get("/filmes/:id"/*Esses dois pontos significa que agr o que for enviado depois do "/filmes", o meu código vai entender que é um id e vai usar esse ":id" para fazer a pesquisa. Ex. de URL: localhost:8081/filmes/4. Esse 4 é a id que eu quero encontrar. O nome que euscolho colocar depois dos : não importa, é um nome que EU escolho. O que importa é que ele esteja no params tbm. Ex.: "request.params.id"*/,(request, response) => {
     
     let idRequest = request.params/*params é uma palavra reservada. Uma chave do Json, assim como body e parser.*/.id; //id que ta vindo da request
 
@@ -35,7 +47,8 @@ app.get("/filmes/:id"/*Esses dois pontos significa que agr o que for enviado dep
 
     response.status(200).send(filmeEncontrado/*Passei a variável da busca. Posso colocar a estrutura da busca direto aqui dentro ou coloca-la em uma variável, como fiz aqui.*/);
 
-})
+})/* O js acha que tudo que vier depois desse "filmes/" é id, vai dar erro se tiver o mesmo metodo depois desse que utilize "filmes/" também. colocar antes. Posso resolver também colocando outra / antes do : . Ex.:  "/filmes/buscar/:id"*/
+
 
 app.post("/filmes/criar", (request, response) => {
     let tituloRequest = request.body.title/*pego o que ta vindo no request de titulo e coloquei em uma variável*/;
