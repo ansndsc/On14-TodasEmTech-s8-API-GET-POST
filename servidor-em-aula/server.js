@@ -30,10 +30,10 @@ app.get("/filmes",(request, response) => {
 })
 
 app.get("/filmes/filtro", (request, response) => {
-    let tituloRequest = request.query.titulo.toLocaleLowerCase();/*esse "titulo" é o nome que vai ser utilizado pra enviar a query. Pode ser qualquer um.*/;
-    let filmeEncontrado = filmesJson.find(
-        filme => filme.title.toLocaleLowerCase() == tituloRequest
-    );
+    let tituloRequest = request.query.titulo.toLowerCase();/*esse "titulo" é o nome que vai ser utilizado pra enviar a query. Pode ser qualquer um. O toLowerCase() transforma tudo que é enviado na request em caixa baixa.*/;
+    let filmeEncontrado = filmesJson.filter(
+        filme => filme.title.toLowerCase().includes(tituloRequest)
+    ); /* Como eu coloquei o toLowerCase() no que foi enviado na request, também tenho que colocar na pesquisa, para poder transformar tudo que eu tiver procurando na lista em caixa baixa tambem. O includes vai pesquisar tudo da lista que contiver o que foi enviado na request. */
 
     response.status(200).send(filmeEncontrado);
 
